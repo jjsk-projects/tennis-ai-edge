@@ -1,0 +1,12 @@
+.venv/
+__pycache__/
+.pytest_cache/
+runs/
+models/serve_suggestions_rf.pkl
+models/pose_landmarker_heavy.task
+.DS_Store
+
+# Model weights: download with `python tools/download_models.py`
+models/*.onnx
+models/*.task
+models/*.pkl

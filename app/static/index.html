@@ -1,0 +1,383 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Centre Court</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Libre+Franklin:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%231F2A24'/%3E%3Cg fill='none' stroke='%23E2C79A' stroke-linecap='round'%3E%3Cg transform='translate(32 41) rotate(-34)'%3E%3Cellipse cx='0' cy='-24' rx='9' ry='12' stroke-width='3'/%3E%3Cpath d='M0 -12v27' stroke-width='4'/%3E%3C/g%3E%3Cg transform='translate(32 41) rotate(34)'%3E%3Cellipse cx='0' cy='-24' rx='9' ry='12' stroke-width='3'/%3E%3Cpath d='M0 -12v27' stroke-width='4'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E">
+<style>
+/* Centre Court: court-line sections, wood-toned words, a net for a banner. */
+:root{
+  --paper:#F5F4EC; --card:#FCFBF6;
+  --wood:#4A3121;        /* walnut: body text */
+  --wood-mid:#7A5233;    /* oak: headings, numbers */
+  --wood-light:#8C6B4F;  /* ash: secondary text (4.6:1 on paper) */
+  --maple:#E2C79A;       /* maple: words on the net */
+  --court:#3F6B3A;       /* court lines */
+  --net:#1F2A24; --tape:#F4F1E6;
+  --bg:var(--paper); --ink:var(--wood); --muted:var(--wood-light); --line:#DCD8C8;
+  --good:#3F6B3A; --warn:#A06A1C; --unk:#8E8A7E; --clay:#9B3B2A; --ball:#CFD84A;
+  --serif:"Cormorant Garamond","Iowan Old Style",Georgia,serif;
+  --sans:"Libre Franklin","Helvetica Neue",Arial,sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root{--paper:#151A16;--card:#1B211C;--wood:#E3CDAA;--wood-mid:#D8B583;--wood-light:#B89C7C;
+        --court:#7FA873;--line:#2E3530;--net:#0E1310;--tape:#E9E3D2;--good:#7FA873;--warn:#D9A04A;--unk:#9A968B}
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.6 var(--sans)}
+
+/* the banner is a net: dark mesh, white tape along the top, a centre strap */
+header{position:relative;background:var(--net) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14'%3E%3Cpath d='M0 0L14 14M14 0L0 14' stroke='%23E9DDC4' stroke-opacity='.09' stroke-width='1'/%3E%3C/svg%3E");color:var(--maple);
+  padding:40px 16px 34px;border-top:12px solid var(--tape);box-shadow:inset 0 1px 0 rgba(0,0,0,.25)}
+header::after{content:"";position:absolute;top:0;bottom:0;left:82%;width:12px;background:var(--tape);opacity:.92}  /* centre strap */
+header .in, main{max-width:1120px;margin:0 auto;position:relative}
+.brand{display:flex;align-items:center;gap:16px}
+.brand svg{width:72px;height:72px;flex:0 0 auto}
+header h1{margin:0;font:600 40px/1.05 var(--serif);color:var(--maple);letter-spacing:.3px}
+header h1 small{display:block;font:500 italic 19px/1.3 var(--serif);color:var(--maple);opacity:.85;margin-top:3px}
+header p{margin:14px 0 0;max-width:60ch;font-size:15px;color:var(--maple);opacity:.92}
+.steps{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px;font-size:13px}
+.steps span{border:1px solid color-mix(in srgb,var(--maple) 55%,transparent);padding:2px 12px;border-radius:99px;color:var(--maple)}
+.steps span.on{background:var(--maple);color:var(--net);border-color:var(--maple);font-weight:600}
+
+main{padding:32px 16px 64px}
+/* each section is a court: outer lines, tramlines on both sides, centre marks top and bottom */
+.card{position:relative;background:var(--card);border:1.5px solid var(--court);padding:24px 38px 22px;margin-bottom:24px}
+.card::before{content:"";position:absolute;top:0;bottom:0;left:14px;right:14px;
+  border-left:1px solid var(--court);border-right:1px solid var(--court);pointer-events:none;opacity:.75}
+.card::after{content:"";position:absolute;left:50%;top:0;bottom:0;width:1.5px;transform:translateX(-50%);pointer-events:none;
+  background:linear-gradient(var(--court) 0 9px,transparent 9px calc(100% - 9px),var(--court) calc(100% - 9px))}
+#results > .card{padding-top:26px}
+h2{font:600 27px/1.2 var(--serif);margin:0 0 14px;color:var(--wood-mid)}
+h3{font:600 21px/1.25 var(--serif);margin:26px 0 10px;color:var(--wood-mid)}
+.row{display:flex;flex-wrap:wrap;gap:16px;align-items:flex-end}
+label{font-size:13px;color:var(--muted);display:flex;flex-direction:column;gap:5px}
+input,select{font:inherit;padding:8px 10px;border:1px solid var(--line);border-radius:3px;background:var(--card);color:var(--wood)}
+input:focus-visible,select:focus-visible,button:focus-visible,.drop:focus-visible{outline:2px solid var(--court);outline-offset:2px}
+button{font:600 14px/1.2 var(--sans);border:1px solid var(--wood-mid);border-radius:3px;padding:10px 18px;cursor:pointer;
+  background:var(--wood-mid);color:var(--card);letter-spacing:.2px}
+button:hover{background:var(--wood)}
+button.ghost{background:transparent;color:var(--wood-mid);border-color:var(--line);font-weight:500}
+button.ghost:hover{border-color:var(--wood-mid)}
+button:disabled{opacity:.5;cursor:default}
+.drop{border:1px dashed var(--court);padding:26px;text-align:center;color:var(--muted);cursor:pointer;flex:1 1 300px;background:transparent}
+.drop.hover{border-style:solid;color:var(--wood-mid)}
+.drop u{color:var(--wood-mid)}
+.ex{display:flex;flex-wrap:wrap;gap:8px}
+.frame-wrap{position:relative;display:inline-block;max-width:100%}
+#frame{max-width:100%;max-height:60vh;display:block;cursor:crosshair}
+#overlay{position:absolute;inset:0;pointer-events:none}
+.hint{font-size:13px;color:var(--muted);margin:8px 0}
+.bar{height:6px;background:var(--line);overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--court);transition:width .4s}
+.tabs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px}
+.tabs button{background:transparent;color:var(--wood-mid);border:1px solid var(--line);font-weight:500}
+.tabs button.on{background:var(--wood-mid);color:var(--card);border-color:var(--wood-mid)}
+.grid2{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:28px}
+@media (max-width:820px){.grid2{grid-template-columns:1fr}}
+.coach{white-space:pre-wrap;border-left:1.5px solid var(--court);padding:4px 0 4px 16px;line-height:1.65}
+.sugg{display:flex;gap:12px;align-items:flex-start;padding:10px 0;border-bottom:1px solid var(--line)}
+.sugg:last-child{border-bottom:0}
+.prob{flex:0 0 40px;text-align:right;font:600 22px/1 var(--serif);color:var(--wood-mid)}
+table{width:100%;border-collapse:collapse;font-size:14px}
+td,th{padding:8px 6px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+th{font-size:12.5px;color:var(--muted);font-weight:600}
+td.num{font-variant-numeric:tabular-nums;white-space:nowrap}
+.chip{display:inline-block;font-size:12px;font-weight:600;padding:1px 9px;border-radius:99px;color:#fff}
+.chip.good{background:var(--good)}.chip.improve{background:var(--warn)}.chip.unknown{background:var(--unk)}
+img.res{max-width:100%;max-height:640px;object-fit:contain;border:1px solid var(--line);display:block}
+.note{font-size:13px;color:var(--warn);margin:4px 0}
+.scroll{overflow-x:auto}
+.legend{display:flex;gap:14px;font-size:12.5px;color:var(--muted);flex-wrap:wrap}
+.legend i{display:inline-block;width:12px;height:3px;margin-right:5px;vertical-align:middle}
+svg text{fill:var(--muted);font-size:11px}
+.err{color:var(--clay);font-weight:600}
+.hidden{display:none}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:0;margin-bottom:16px;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.kpi{padding:12px 14px;border-left:1px solid var(--line)}
+.kpi:first-child{border-left:0;padding-left:0}
+.kpi b{display:block;font:600 30px/1.1 var(--serif);color:var(--wood-mid);font-variant-numeric:lining-nums tabular-nums}
+.kpi span{font-size:12.5px;color:var(--muted)}
+.kpi.score b{font-size:36px}
+.ladder{display:inline-flex;gap:3px;vertical-align:middle}.rung{display:inline-block;width:14px;height:6px;background:var(--line)}.rung.on{background:var(--court)}
+@media (max-width:560px){
+  header h1{font-size:32px}.brand svg{width:56px;height:56px}header::after{display:none}
+  .card{padding:20px 24px}.card::before{left:9px;right:9px}
+  .kpi{border-left:0;padding-left:0}
+}
+@media (prefers-reduced-motion: reduce){.bar i{transition:none}}
+</style>
+</head>
+<body>
+<header><div class="in">
+  <div class="brand"><svg viewBox="0 0 64 64" role="img" aria-label="Two crossed wooden tennis racquets" style="color:var(--maple)"><defs><clipPath id="ccHead"><ellipse cx="0" cy="-24" rx="8" ry="11"/></clipPath></defs><g fill="none" stroke-linecap="round" stroke-linejoin="round"><g transform="translate(32 41) rotate(-34)"><g clip-path="url(#ccHead)" stroke="currentColor" stroke-width=".7" opacity=".6"><path d="M-10-36v24M-6.5-38v28M-3-38v28M0.5-38v28M4-38v28M7.5-38v28M-11-33h22M-11-29.5h22M-11-26h22M-11-22.5h22M-11-19h22M-11-15.5h22"/></g><ellipse cx="0" cy="-24" rx="9" ry="12" stroke="currentColor" stroke-width="2.4"/><path d="M-4.2-12.8 0-5 4.2-12.8" stroke="currentColor" stroke-width="1.8"/><path d="M0-5v20" stroke="currentColor" stroke-width="3.4"/><path d="M-2.1 11h4.2" stroke="currentColor" stroke-width="1.4" opacity=".7"/></g><g transform="translate(32 41) rotate(34)"><g clip-path="url(#ccHead)" stroke="currentColor" stroke-width=".7" opacity=".6"><path d="M-10-36v24M-6.5-38v28M-3-38v28M0.5-38v28M4-38v28M7.5-38v28M-11-33h22M-11-29.5h22M-11-26h22M-11-22.5h22M-11-19h22M-11-15.5h22"/></g><ellipse cx="0" cy="-24" rx="9" ry="12" stroke="currentColor" stroke-width="2.4"/><path d="M-4.2-12.8 0-5 4.2-12.8" stroke="currentColor" stroke-width="1.8"/><path d="M0-5v20" stroke="currentColor" stroke-width="3.4"/><path d="M-2.1 11h4.2" stroke="currentColor" stroke-width="1.4" opacity=".7"/></g></g></svg>
+    <h1>Centre Court<small>Baseline coaching for serve and forehand</small></h1></div>
+  <p>Film a serve or forehand. We find the player, the racquet, the ball and the hitting point, then coach you at your level.</p>
+  <div class="steps" id="steps">
+    <span data-s="0">1 Video</span><span data-s="1">2 Player + skeleton</span><span data-s="2">3 Ball + court</span>
+    <span data-s="3">4 Judge (by level)</span><span data-s="4">5 Coach</span>
+  </div>
+</div></header>
+<main>
+  <section class="card" id="input">
+    <h2>1. Choose a video</h2>
+    <div class="row">
+      <div class="drop" id="drop">Drop a tennis video here or <u>browse</u><br><small>.mov / .mp4 &middot; right-handed player &middot; one player in view &middot; 120 fps welcome</small>
+        <input type="file" id="file" accept="video/*" class="hidden"></div>
+      <div>
+        <div class="hint">or try an example clip:</div>
+        <div class="ex" id="examples"></div>
+      </div>
+    </div>
+    <div class="row" style="margin-top:14px">
+      <label>Stroke<select id="mode">
+        <option value="serve">Serve</option>
+        <option value="forehand">Forehand</option></select></label>
+      <label>Player level<select id="level">
+        <option value="beginner">Beginner</option>
+        <option value="intermediate" selected>Intermediate</option>
+        <option value="club">Club level</option></select></label>
+      <label>Player height (m)<input id="height" type="number" step="0.01" min="1.2" max="2.3" value="1.80"></label>
+      <label>Camera position<select id="camera">
+        <option value="far">Facing the player (net post on the forehand side / across the net)</option>
+        <option value="near">Behind the server</option></select></label>
+    </div>
+    <div class="hint" id="guide"></div>
+    <div class="hint" id="upmsg"></div>
+  </section>
+
+  <section class="card hidden" id="calib">
+    <h2>2. Baseline (optional, serve only)</h2>
+    <div class="hint">The baseline is found automatically. If you want to set it yourself, click two points on the baseline near the server.</div>
+    <div class="frame-wrap"><img id="frame" alt="first frame"><svg id="overlay"></svg></div>
+    <div class="row" style="margin-top:12px">
+      <button id="start">Analyse</button>
+      <button class="ghost" id="clear">Clear baseline</button>
+      <span class="hint" id="blmsg">Baseline: automatic</span>
+    </div>
+  </section>
+
+  <section class="card hidden" id="progress">
+    <h2 id="ptitle">Analysing&hellip;</h2>
+    <div class="bar"><i id="pbar"></i></div>
+    <div class="hint" id="pstage"></div>
+  </section>
+
+  <section class="hidden" id="results"></section>
+</main>
+<script>
+const $ = s => document.querySelector(s);
+let job = null, baseline = [];
+
+function setStep(n){ document.querySelectorAll('#steps span').forEach(e => e.classList.toggle('on', +e.dataset.s <= n)); }
+function esc(s){ return String(s ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+
+fetch('/api/examples').then(r => r.json()).then(d => {
+  const box = $('#examples');
+  if (!d.examples.length) box.innerHTML = '<span class="hint">no clips/ folder</span>';
+  d.examples.forEach(n => { const b = document.createElement('button'); b.className = 'ghost'; b.textContent = n;
+    b.onclick = () => post('/api/example?name=' + encodeURIComponent(n)).then(gotJob); box.appendChild(b); });
+});
+
+const drop = $('#drop'), file = $('#file');
+drop.onclick = () => file.click();
+drop.ondragover = e => { e.preventDefault(); drop.classList.add('hover'); };
+drop.ondragleave = () => drop.classList.remove('hover');
+drop.ondrop = e => { e.preventDefault(); drop.classList.remove('hover'); if (e.dataTransfer.files[0]) upload(e.dataTransfer.files[0]); };
+file.onchange = () => file.files[0] && upload(file.files[0]);
+
+function upload(f){
+  const x = new XMLHttpRequest();
+  x.open('POST', '/api/upload?name=' + encodeURIComponent(f.name));
+  x.upload.onprogress = e => $('#upmsg').textContent = `Uploading ${f.name}… ${Math.round(100 * e.loaded / e.total)}%`;
+  x.onload = () => { const d = JSON.parse(x.responseText); if (x.status !== 200) return $('#upmsg').innerHTML = `<span class="err">${esc(d.error)}</span>`; $('#upmsg').textContent = ''; gotJob(d); };
+  x.onerror = () => $('#upmsg').innerHTML = '<span class="err">Upload failed</span>';
+  x.send(f);
+}
+function post(u){ return fetch(u, {method:'POST'}).then(r => r.json()); }
+
+function gotJob(d){
+  if (d.error) return $('#upmsg').innerHTML = `<span class="err">${esc(d.error)}</span>`;
+  job = d; baseline = []; setStep(0);
+  $('#calib').classList.remove('hidden'); $('#results').classList.add('hidden'); $('#progress').classList.add('hidden');
+  $('#frame').src = d.first_frame + '?' + Date.now(); drawBaseline();
+  $('#calib').scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+$('#frame').onclick = e => {
+  const img = e.target, r = img.getBoundingClientRect();
+  const x = (e.clientX - r.left) * img.naturalWidth / r.width, y = (e.clientY - r.top) * img.naturalHeight / r.height;
+  if (baseline.length >= 2) baseline = [];
+  baseline.push([x, y]); drawBaseline();
+};
+$('#clear').onclick = () => { baseline = []; drawBaseline(); };
+function drawBaseline(){
+  const img = $('#frame'), svg = $('#overlay');
+  const W = img.naturalWidth || 1, H = img.naturalHeight || 1;
+  svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+  let s = baseline.map(p => `<circle cx="${p[0]}" cy="${p[1]}" r="${W/90}" fill="#c9dc2a" stroke="#000"/>`).join('');
+  if (baseline.length === 2){
+    const [[x1,y1],[x2,y2]] = baseline, k = (y2 - y1) / ((x2 - x1) || 1e-6);
+    s += `<line x1="0" y1="${y1 - k*x1}" x2="${W}" y2="${y1 + k*(W - x1)}" stroke="#c9dc2a" stroke-width="${W/220}" stroke-dasharray="${W/60}"/>`;
+  }
+  svg.innerHTML = s;
+  $('#blmsg').textContent = baseline.length === 2 ? 'Baseline: manual' : baseline.length ? 'Click one more point…' : 'Baseline: automatic';
+}
+$('#frame').onload = drawBaseline;
+
+$('#start').onclick = () => {
+  if (!job) return;
+  let q = `height=${encodeURIComponent($('#height').value)}&camera=${$('#camera').value}&mode=${$('#mode').value}&level=${$('#level').value}`;
+  if (baseline.length === 2) q += '&baseline=' + baseline.flat().map(v => v.toFixed(1)).join(',');
+  post(`/api/jobs/${job.id}/start?${q}`).then(d => {
+    if (d.error) return alert(d.error);
+    $('#progress').classList.remove('hidden'); $('#results').classList.add('hidden');
+    $('#ptitle').textContent = 'Analysing ' + job.name + '…'; $('#start').disabled = true; poll();
+  });
+};
+
+function poll(){
+  fetch('/api/jobs/' + job.id).then(r => r.json()).then(d => {
+    $('#pbar').style.width = (100 * (d.progress || 0)) + '%'; $('#pstage').textContent = d.stage || '';
+    const p = d.progress || 0; setStep(p < .05 ? 0 : p < .5 ? 1 : p < .82 ? 2 : p < .97 ? 3 : 4);
+    if (d.status === 'done'){ $('#start').disabled = false; $('#ptitle').textContent = 'Done'; render(d.result); }
+    else if (d.status === 'error'){ $('#start').disabled = false; $('#ptitle').innerHTML = `<span class="err">Failed: ${esc(d.error)}</span>`; }
+    else setTimeout(poll, 700);
+  });
+}
+
+const FMT = {
+  knee_bend_deg: ['Knee bend (trophy / load)', '°'], contact_height_m: ['Contact height', ' m'],
+  contact_height_ratio: ['Contact / body height', '×'], toss_apex_m: ['Toss peak height', ' m'],
+  toss_above_contact_m: ['Toss peak above contact', ' m'], toss_side_offset: ['Toss toward hitting side', ' m'],
+  hit_elbow_deg: ['Hitting elbow at contact', '°'], toss_arm_elbow_deg: ['Toss-arm elbow', '°'],
+  leg_drive_m: ['Leg drive (hip rise)', ' m'], airborne_m: ['Feet off ground at contact', ' m'],
+  front_foot_vs_baseline_m: ['Front foot vs baseline', ' m'], ball_speed_kmh: ['Ball speed (lower bound)', ' km/h'],
+  pose_confidence_contact: ['Arm keypoint confidence', ''],
+  right_foot_ahead_m: ['Right foot ahead of left', ' m'], contact_spacing_m: ['Room to the side at contact', ' m'],
+  low_to_high_m: ['Low-to-high swing rise', ' m'], follow_through: ['Finish over left shoulder (1 = yes)', ''],
+  unit_turn_ratio: ['Shoulder turn (width ratio)', ''],
+  contact_above_head_m: ['Contact above top of head', ' m'], head_height_m: ['Top of head', ' m'],
+  bounce_to_contact_s: ['Bounce to contact', ' s'],
+  court_position: ['Court position', ''], baseline_distance_m: ['Inside the baseline by', ' m'],
+  contact_rotation_ratio: ['Chest turned at contact (ratio)', ''], stance_width_m: ['Stance width', ' m'],
+  head_move_m: ['Head movement at contact', ' m'], prep_lead_s: ['Turn finished before contact', ' s'],
+  left_arm_height_ratio: ['Left hand height / shoulder', ''], racquet_below_contact_m: ['Racquet drop below ball', ' m'],
+  racquet_speed_ms: ['Racquet head speed (image)', ' m/s'], balance_offset_m: ['Head off-centre at finish', ' m'],
+  trophy_elbow_vs_shoulder_m: ['Elbow vs shoulder at trophy', ' m'], shoulder_tilt_m: ['Shoulder tilt at trophy', ' m'],
+  toss_arm_up_m: ['Toss hand above head at trophy', ' m'], head_drop_m: ['Head drop before contact', ' m'],
+  landing_inside_m: ['Landing inside baseline', ' m'], racquet_drop_m: ['Racquet drop behind back', ' m'],
+  coil_sep: ['Shoulder coil past hips (ratio)', ''], chain_lead_s: ['Kinetic chain lead (hips/legs before hand)', ' s'],
+  spine_change_deg: ['Spine angle change', '°'], head_level_m: ['Head height range in swing', ' m'],
+  split_step_m: ['Split-step hop', ' m'], weight_transfer_m: ['Weight moved toward target', ' m'],
+  left_arm_tuck_m: ['Left hand from chest at contact', ' m'], knee_flex_contact_deg: ['Knee bend at contact', '°'],
+  trophy_lean_deg: ['Trunk lean at trophy', '°'], body_line_deg: ['Feet-to-hand line from vertical', '°'],
+  contact_tilt_m: ['Hitting shoulder above tossing shoulder', ' m'], toss_arm_down_m: ['Toss hand below shoulder at contact', ' m'],
+};
+const KPIS = {serve: ['contact_height_m', 'toss_apex_m', 'knee_bend_deg', 'leg_drive_m', 'ball_speed_kmh'],
+              forehand: ['contact_height_m', 'contact_above_head_m', 'bounce_to_contact_s', 'unit_turn_ratio', 'racquet_speed_ms']};
+const fmt = (v, u) => v === null || v === undefined ? '—' : (typeof v === 'string' ? v : (Math.round(v * 100) / 100) + u);
+
+const GUIDE = {
+  forehand: 'Filming guide: put the phone beside the net post on your forehand side (the right side for a right-hander), facing you, with your whole body and the bounce in view. Only forehands are analysed - backhands are recognised and skipped.',
+  serve: 'Filming guide: across the net, facing the server, with the whole body and the toss in view.'};
+const showGuide = () => { $('#guide').textContent = GUIDE[$('#mode').value]; };
+$('#mode').addEventListener('change', showGuide); showGuide();
+const LEVEL_NAMES = {beginner: 'Beginner', intermediate: 'Intermediate', club: 'Club level'};
+// three steps Beginner -> Intermediate -> Club, filled up to the level this value reaches
+function ladder(r){
+  if (!r.reached) return '<span class="hint">—</span>';
+  const n = {'below beginner': 0, beginner: 1, intermediate: 2, club: 3}[r.reached] ?? 0;
+  const dots = [1, 2, 3].map(i => `<i class="rung ${i <= n ? 'on' : ''}"></i>`).join('');
+  return `<span class="ladder" title="${esc(r.reached)}">${dots}</span> <span class="hint">${esc(r.reached === 'club' ? 'Club' : r.reached === 'intermediate' ? 'Inter.' : r.reached === 'beginner' ? 'Beginner' : 'below')}</span>`;
+}
+let curLevel = 'intermediate';
+
+function render(res){
+  curLevel = res.level || $('#level').value || curLevel;
+  const box = $('#results'); box.classList.remove('hidden');
+  const list = res.strokes || res.serves, mode = res.mode || 'serve', Mode = mode[0].toUpperCase() + mode.slice(1);
+  if (!list.length){
+    box.innerHTML = `<div class="card"><h2>No ${mode} found</h2><p class="hint">${mode === 'serve'
+      ? 'We could not find a serve motion (hand above the head + ball toss). Is this a groundstroke clip? Try Forehand mode.'
+      : 'We could not find a forehand swing (fast racket hand moving across the body). Is this a serve clip? Try Serve mode.'}</p></div>`;
+    return;
+  }
+  let tabs = list.map((s, i) => `<button data-i="${i}" class="${i ? '' : 'on'}">${Mode} ${s.index}</button>`).join('');
+  box.innerHTML = `<div class="card"><h2>Results &mdash; ${esc(res.video)}</h2>
+    <div class="hint">${list.length} ${mode}(s)${res.other_side_skipped ? ` &middot; ${res.other_side_skipped} backhand(s) recognised and skipped` : ''} &middot; ${res.frames} frames @ ${Math.round(res.fps)} fps &middot; analysed in ${res.elapsed_s}s &middot; judged by coaching logic</div>
+    <div class="row" style="margin:10px 0 4px"><label>Feedback for<select id="rlevel">${Object.entries(LEVEL_NAMES).map(([k, v]) =>
+      `<option value="${k}" ${k === curLevel ? 'selected' : ''}>${v}</option>`).join('')}</select></label></div>
+    <div class="tabs" id="stabs">${tabs}</div><div id="serve"></div></div>`;
+  let cur = 0;
+  $('#rlevel').onchange = e => { curLevel = e.target.value; show(cur); };
+  const show = i => { cur = i; document.querySelectorAll('#stabs button').forEach(b => b.classList.toggle('on', +b.dataset.i === i)); $('#serve').innerHTML = serveHTML(res, list[i]); };
+  document.querySelectorAll('#stabs button').forEach(b => b.onclick = () => show(+b.dataset.i));
+  show(0); box.scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+function serveHTML(res, s0){
+  const L = (s0.levels && s0.levels[curLevel]) || s0;
+  const s = Object.assign({}, s0, {rules: L.rules, suggestions: L.suggestions, coach_text: L.coach_text, score: L.score});
+  const base = `/runs/${job.id}/`, m = s.measurements;
+  const kpi = (k) => `<div class="kpi"><b>${fmt(m[k], FMT[k][1])}</b><span>${FMT[k][0]}</span></div>`;
+  const sugg = s.suggestions.length ? s.suggestions.slice().sort((a, b) => a.priority - b.priority).map(x =>
+      `<div class="sugg"><div class="prob">#${x.priority}</div><div><b>${esc(x.title)}</b> <span class="hint">${esc(x.category || '')}</span><br>${esc(x.tip)}</div></div>`).join('')
+    : '<p class="hint">No corrections needed - every measured check passed.</p>';
+  const cats = [...new Set(s.rules.map(r => r.category || 'Checks'))];
+  const counts = st => s.rules.filter(r => r.status === st).length;
+  const rules = cats.map(c => `<tr><th colspan="4" style="padding-top:12px;color:var(--court)">${esc(c)}</th></tr>` +
+      s.rules.filter(r => (r.category || 'Checks') === c).map(r => `<tr><td>${esc(r.title)}</td><td><span class="chip ${r.status}">${r.status}</span></td>
+      <td class="num">${r.value === null ? '—' : r.value}</td><td>${ladder(r)}</td><td class="hint">${esc(r.ladder || r.target)}</td></tr>`).join('')).join('');
+  const meas = Object.keys(FMT).filter(k => k in m && m[k] !== null).map(k => `<tr><td>${FMT[k][0]}</td><td class="num">${fmt(m[k], FMT[k][1])}</td></tr>`).join('');
+  const notes = (s.notes || []).map(n => `<div class="note">&#9888; ${esc(n)}</div>`).join('');
+  const img = (k, alt) => s.images[k] ? `<img class="res" src="${base + s.images[k]}" alt="${alt}">` : '<p class="hint">not available</p>';
+  return `
+  <div class="kpis"><div class="kpi score"><b>${s.score === null || s.score === undefined ? '—' : s.score + '/100'}</b><span>Score &middot; ${LEVEL_NAMES[curLevel]}</span></div>${KPIS[s.mode || 'serve'].slice(0, 4).map(kpi).join('')}</div>
+  ${notes}
+  <div class="grid2" style="margin-top:12px">
+    <div><h3>Coach &middot; ${LEVEL_NAMES[curLevel]}</h3><div class="coach">${esc(s.coach_text)}</div>
+         <h3>Top fixes, in priority order</h3>${sugg}</div>
+    <div><h3>Sequence</h3>${img('gif', 'animated serve')}
+         <div class="hint">White = racquet (detected), yellow = ball before contact, cross = bounce, star = hitting point (midpoint of the two frames around the hit), orange arrow = ball leaving the racquet. Ruler = metres at the player.</div></div>
+  </div>
+  <h3>Ball trajectory (full frame)</h3>${img('overview', 'ball trajectory')}
+  <div class="hint">Ball searched on the whole screen. Yellow = ball coming in (thin = frames it was hidden), cross = bounce, star = hitting point, orange arrow = ball leaving.</div>
+  <h3>Key moments</h3><div class="scroll">${img('keyframes', 'key frames')}</div>
+  <h3>Skeleton</h3><div class="scroll">${img('skeleton', 'skeleton')}</div>
+  <div style="max-width:640px"><h3>Height of ball and hands (m)</h3>${chart(s.timeline)}
+      <div class="legend"><span><i style="background:#c9dc2a"></i>ball</span><span><i style="background:#e8553b"></i>right (hitting) wrist</span><span><i style="background:#3fbf73"></i>left (toss) wrist</span><span><i style="background:var(--muted)"></i>contact</span></div></div>
+  <div class="grid2">
+    <div><h3>${LEVEL_NAMES[curLevel]} checks &middot; ${counts('good')} good, ${counts('improve')} to improve, ${counts('unknown')} not measurable</h3><table><tr><th>Check</th><th>Status</th><th>Value</th><th>Level reached</th><th>Targets: Beginner | Intermediate | Club</th></tr>${rules}</table></div>
+    <div><h3>All measurements</h3><table>${meas}</table>
+      <p class="hint">Contact: ${esc(s.contact_method)} &middot; key frames ${Object.entries(s.frames).map(([k, v]) => `${k} ${v === null ? '—' : Math.round(v * 10) / 10}`).join(', ')}</p></div>
+  </div>`;
+}
+
+function chart(tl){
+  if (!tl || !tl.t || !tl.t.length) return '<p class="hint">no data</p>';
+  const W = 520, H = 230, L = 34, B = 22, T = 8, R = 8;
+  const series = [['ball_m', '#c9dc2a'], ['right_wrist_m', '#e8553b'], ['left_wrist_m', '#3fbf73']];
+  const vals = series.flatMap(([k]) => tl[k].filter(v => v !== null));
+  const ymax = Math.max(3, Math.ceil(Math.max(...vals, 0)));
+  const t0 = tl.t[0], t1 = tl.t[tl.t.length - 1];
+  const X = t => L + (t - t0) / ((t1 - t0) || 1) * (W - L - R), Y = v => T + (1 - v / ymax) * (H - T - B);
+  let g = '';
+  for (let v = 0; v <= ymax; v++) g += `<line x1="${L}" x2="${W - R}" y1="${Y(v)}" y2="${Y(v)}" stroke="currentColor" opacity=".12"/><text x="${L - 6}" y="${Y(v) + 4}" text-anchor="end">${v}</text>`;
+  for (let t = Math.ceil(t0 * 2) / 2; t <= t1; t += 0.5) g += `<text x="${X(t)}" y="${H - 6}" text-anchor="middle">${t.toFixed(1)}s</text>`;
+  g += `<line x1="${X(0)}" x2="${X(0)}" y1="${T}" y2="${H - B}" stroke="currentColor" opacity=".5" stroke-dasharray="4 4"/>`;
+  for (const [k, c] of series){
+    let d = '', pen = false;
+    tl.t.forEach((t, i) => { const v = tl[k][i]; if (v === null){ pen = false; return; } d += (pen ? 'L' : 'M') + X(t).toFixed(1) + ' ' + Y(v).toFixed(1); pen = true; });
+    g += `<path d="${d}" fill="none" stroke="${c}" stroke-width="${k === 'ball_m' ? 3 : 2}" stroke-linejoin="round"/>`;
+  }
+  return `<svg viewBox="0 0 ${W} ${H}" style="width:100%;height:auto;color:var(--ink)">${g}</svg>`;
+}
+</script>
+</body>
+</html>

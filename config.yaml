@@ -1,0 +1,29 @@
+# ============================================================================
+# Serve Lab (tennis-ai-edge) - pipeline configuration
+# Loaded by src/pipeline_config.py. Plain nested YAML (PyYAML optional).
+# ============================================================================
+
+pipeline:
+  video:                          # big phone videos are scaled / sub-sampled first
+    max_width: 1280               # px (1080p/4K -> 1280 wide)
+    max_fps: 120                  # 240 fps -> every 2nd frame; 120 fps -> every frame
+    keep_frames: true             # keep the extracted frame images (runs/<id>/frames/)
+  detector:                       # Stage 1: player box - YOLOX-tiny (Apache-2.0)
+    model_path: models/yolox_tiny.onnx
+    every_frames: 3               # run the detector every N frames; the skeleton
+                                  #   box follows the player in between
+    max_hz: 10                    # ...but at most 10 times a second (120 fps -> every 12th)
+  pose:                           # Stage 2: skeleton - MediaPipe BlazePose (Apache-2.0)
+    max_hz: 60                    # skeleton at most 60 times a second; gaps interpolated
+    model_path: models/pose_landmarker.task   # swap for pose_landmarker_heavy.task
+                                              #   (more accurate arms, ~3x slower)
+
+coach:                            # Stage 4: coaching text
+  backend: template               # template | openai | anthropic
+  # --- openai-compatible (e.g. local oMLX / llama.cpp / vLLM) ---
+  base_url: http://127.0.0.1:8000/v1
+  model: ""                       # model id served by your local server
+  api_key: ""                     # or env COACH_API_KEY
+  # --- anthropic: set env ANTHROPIC_API_KEY and model below ---
+  # model: claude-sonnet-5-5
+  timeout_s: 60

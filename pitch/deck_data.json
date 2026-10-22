@@ -1,0 +1,81 @@
+{
+ "n_fh_rules": 18,
+ "n_serve_rules": 15,
+ "n_fh": 5,
+ "fh_pick": 2,
+ "coach_pick": 5,
+ "coach_text": "Good (12): Contact not above your head; Ball bounced close enough; Body sideways in preparation; Contact in front of the body; Early preparation; Left arm tracks the ball; Load the legs (squat); Stable base; Racquet drops below the ball; Low-to-high swing (topspin); Legs drive up into the ball; Finish over the left shoulder.\nTo improve on your next forehands (5, most important first):\n1. [Footwork] At contact your right foot is in front of your left. Step in with the LEFT foot so your weight transfers forward through the ball.\n2. [Contact] You are hitting the ball too low - bend your knees to get down to it or take it a little earlier.\n3. [Contact] Give yourself room: meet the ball about an arm's length to your right, not jammed into the body or at full stretch.\n4. [Contact] Keep your head still and your eyes on the contact point until the ball has left the strings.\n5. [Finish] Stay balanced: at the finish your head should be over your feet, not falling away.\nCould not measure (1): Arm not cramped at contact (film a little closer, steady, with the ball in view).",
+ "serve_kpis": [
+  [
+   "3.25 m",
+   "contact height, with a jump"
+  ],
+  [
+   "4.23 m",
+   "toss peak"
+  ],
+  [
+   "≥ 100 km/h",
+   "ball speed off the racquet"
+  ],
+  [
+   "Frame 50.5",
+   "contact, same as the manual check"
+  ]
+ ],
+ "serve_readout": "10 of 15 checks good; 3 fixes in priority order - shoulders tilted up to the ball; toss arm stays up; land inside the court.",
+ "fh_readout": "hitting point at 1.67 m, 13 of 18 checks good; fix: contact in front of the body; room between body and ball; early preparation; stable base.",
+ "fh_rows": [
+  [
+   1,
+   "1.11 m",
+   "0.86 s",
+   "1"
+  ],
+  [
+   2,
+   "1.67 m",
+   "0.52 s",
+   "4"
+  ],
+  [
+   3,
+   "0.52 m",
+   "not seen",
+   "3"
+  ],
+  [
+   4,
+   "0.95 m",
+   "not seen",
+   "1"
+  ],
+  [
+   5,
+   "0.54 m",
+   "0.55 s",
+   "5"
+  ]
+ ],
+ "frames": 1818,
+ "cost_labels": [
+  "Split into frames",
+  "Player detection",
+  "Skeleton",
+  "Ball candidates",
+  "Strokes + racquet",
+  "Pictures + GIFs"
+ ],
+ "cost_values": [
+  34,
+  10,
+  25,
+  46,
+  47,
+  26
+ ],
+ "t_fh_total": 199,
+ "t_before": "270-390",
+ "t_fh_min": 3.3,
+ "t_serve": 45
+}

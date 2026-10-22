@@ -1,0 +1,13 @@
+# Serve Lab (tennis-ai-edge) - runtime dependencies. All permissive licences
+# (commercial use OK) - see THIRD_PARTY_LICENSES.md.
+numpy>=1.24            # BSD-3
+opencv-contrib-python  # Apache-2.0 (OpenCV >= 4.5)
+mediapipe              # Apache-2.0 - BlazePose skeleton
+onnxruntime            # MIT - runs the YOLOX player detector
+Pillow                 # MIT-CMU (HPND) - animated GIFs
+PyYAML                 # MIT (optional: built-in fallback parser)
+
+# dev
+pytest
+
+# Python 3.9+. Web demo uses only the standard library (no Flask/FastAPI).
