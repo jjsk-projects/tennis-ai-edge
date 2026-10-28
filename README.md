@@ -8,33 +8,33 @@ A serve or forehand video goes in. The app splits it into frames and finds the p
 
 ```mermaid
 flowchart TD
-  A[Phone video - serve or forehand, up to 120 fps] --> S1
-  subgraph S1[Stage 1 - Frames]
-    F[Split into one JPEG per frame, 1280 px wide]
+  A["Phone video - serve or forehand, up to 120 fps"] --> S1
+  subgraph S1["Stage 1 - Frames"]
+    F["Split into one JPEG per frame, 1280 px wide"]
   end
   S1 --> S2
-  subgraph S2[Stage 2 - Player and skeleton]
-    B[Player box - YOLOX-tiny, 10x per second] --> C[33-point skeleton - BlazePose on a zoomed crop, 60x per second]
-    C --> C2[Confidence-weighted smoothing]
+  subgraph S2["Stage 2 - Player and skeleton"]
+    B["Player box - YOLOX-tiny, 10x per second"] --> C["33-point skeleton - BlazePose on a zoomed crop, 60x per second"]
+    C --> C2["Confidence-weighted smoothing"]
   end
   S2 --> S3
-  subgraph S3[Stage 3 - Racquet, ball, court]
-    R[Racquet - YOLOX on a zoomed crop]
-    D[Ball - motion blobs over the whole screen; colour on HD; gravity parabola for the serve toss]
-    H[Hitting point = midpoint of the ball in the two frames around the hit]
-    G[Bounce, full ball trajectory, baseline, scale px to metres]
+  subgraph S3["Stage 3 - Racquet, ball, court"]
+    R["Racquet - YOLOX on a zoomed crop"]
+    D["Ball - motion blobs over the whole screen; colour on HD; gravity parabola for the serve toss"]
+    H["Hitting point = midpoint of the ball in the two frames around the hit"]
+    G["Bounce, full ball trajectory, baseline, scale px to metres"]
     R --> H
     D --> H
   end
   S3 --> S4
-  subgraph S4[Stage 4 - Judge]
-    J[Coaching logic: 26 forehand / 20 serve checks (incl. joint analysis); good, improve, unknown; tips in priority order]
+  subgraph S4["Stage 4 - Judge"]
+    J["Coaching logic: 26 forehand / 20 serve checks (incl. joint analysis); good, improve, unknown; tips in priority order"]
   end
   S4 --> S5
-  subgraph S5[Stage 5 - Coach]
-    K[Template, local LLM, or Claude API]
+  subgraph S5["Stage 5 - Coach"]
+    K["Template, local LLM, or Claude API"]
   end
-  S5 --> O[Results: coach note covering every check, ball trajectory, slow-motion GIF, key moments, skeletons, height chart, checklist]
+  S5 --> O["Results: coach note covering every check, ball trajectory, slow-motion GIF, key moments, skeletons, height chart, checklist"]
 ```
 
 ## Quick start (macOS / Linux, Python 3.9+)
