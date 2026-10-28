@@ -224,7 +224,3 @@ pitch/                                   ASUS hackathon deck (ServeLab_pitch.ppt
 COACH_BACKEND=openai COACH_BASE_URL=http://127.0.0.1:8000/v1 COACH_MODEL=<model> COACH_API_KEY=<key> python app/server.py
 COACH_BACKEND=anthropic ANTHROPIC_API_KEY=... COACH_MODEL=claude-sonnet-5-5 python app/server.py
 ```
-
-## Licences
-
-Every component uses a permissive licence that allows closed-source commercial use; see [THIRD_PARTY_LICENSES.md](THIRD_PARTY_LICENSES.md). Ultralytics YOLO was deliberately not used, because it is AGPL-3.0.

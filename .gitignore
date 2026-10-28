@@ -10,3 +10,6 @@ models/pose_landmarker_heavy.task
 models/*.onnx
 models/*.task
 models/*.pkl
+
+# Kept on the local computer only (not published)
+THIRD_PARTY_LICENSES.md
