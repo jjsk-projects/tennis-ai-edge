@@ -65,7 +65,7 @@ python -m pytest -q
 
 Example clips:
 - `IMG_3025.mov` and `IMG_3322.mov`: serves at 30 fps, with a small player.
-- `forehand_120fps.mp4`: forehands at 1080p and 120 fps. Copy it into `clips/` yourself; it is too large to sync automatically.
+- `forehand_120fps.mp4`: forehands at 1080p and 120 fps.
 
 ## The five stages
 
@@ -208,14 +208,17 @@ app/server.py, app/static/index.html     web demo (standard-library HTTP server 
 src/pipeline.py                          orchestrates stages 1-5 and the visuals per stroke
 src/stages/detection/                    YOLOX player and racquet detector (ONNX Runtime)
 src/stages/pose_model/                   BlazePose on a zoomed crop, COCO-17 conversion, smoothing
-src/stages/ball_tracking/                motion candidates, serve toss RANSAC, racquet contact, bounce, Kalman filter
+src/stages/ball_tracking/                motion candidates, serve toss RANSAC, racquet contact, bounce, backhand filter
 src/stages/court_segmentation/           baseline detection
-src/stages/serve_analysis/               serve and forehand measurements and coaching rules
+src/stages/serve_analysis/               serve and forehand measurements, joint analysis, levels and coaching rules
 src/stages/local_llm/coach.py            template / OpenAI-compatible / Anthropic coach
 src/stages/visualize/render.py           keyframes, skeletons, racquet, GIF, overview
-tools/                                   run_video, download_models, omllab (local oMLX helper)
-tests/                                   unit tests (toss and contact, rules, Kalman, pose mapping)
-pitch/                                   ASUS hackathon deck (ServeLab_pitch.pptx + build_deck.js) and demo images
+tools/                                   run_video (command line), download_models
+tests/                                   unit tests (toss and contact, rules and levels, joints, pose mapping)
+clips/                                   example videos (two serves, one forehand clip)
+config.yaml                              pipeline settings
+technical-steps.md                       how each stage works, in detail
+pitch/Centre_Court_pitch.pptx            pitch deck (team, problem, results - all non-technical material)
 ```
 
 ## Coach backends
@@ -224,3 +227,7 @@ pitch/                                   ASUS hackathon deck (ServeLab_pitch.ppt
 COACH_BACKEND=openai COACH_BASE_URL=http://127.0.0.1:8000/v1 COACH_MODEL=<model> COACH_API_KEY=<key> python app/server.py
 COACH_BACKEND=anthropic ANTHROPIC_API_KEY=... COACH_MODEL=claude-sonnet-5-5 python app/server.py
 ```
+
+## Licence
+
+PolyForm Noncommercial 1.0.0 - see [LICENSE.md](LICENSE.md). Free for personal, research and educational use; commercial use needs permission.

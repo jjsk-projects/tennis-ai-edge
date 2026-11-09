@@ -1,4 +1,4 @@
-# Technical steps — Serve Lab pipeline
+# Technical steps — Centre Court pipeline
 
 Per-stage implementation detail, tuning knobs, edge-deployment notes and troubleshooting. Setup is in the README.
 
@@ -59,7 +59,7 @@ Coordinates are full-frame pixels at the processed resolution. Heights come from
 **Forehand contact** (`find_racquet_contact`, preferred on HD footage)
 - Ball blobs must be tennis-ball yellow (HSV hue 20–50, S ≥ 60, V ≥ 110). Blobs on the torso, head or shoes are discarded, because yellow shoes look like balls.
 - **Hitting point = midpoint of the ball in the two frames closest to the racquet head** (within 0.35 × body height).
-- The incoming (up to 1.4 s) and outgoing (up to 0.5 s) balls are chained with a constant-velocity prediction that bridges up to 0.1 s of missing frames (ball behind the player). At the bounce, where the direction flips, the chain accepts the candidate at the right distance nearest the prediction. This is the original Kalman idea in its simplest form.
+- The incoming (up to 1.4 s) and outgoing (up to 0.5 s) balls are chained with a constant-velocity prediction that bridges up to 0.1 s of missing frames (ball behind the player). At the bounce, where the direction flips, the chain accepts the candidate at the right distance nearest the prediction.
 - A swing counts as a stroke only if (a) the ball is followed for at least 5 frames into or out of the racquet, and (b) `confirms_hit`: the racquet head moves at least 0.2 body heights per 0.1 s at contact and the ball leaves in the swing direction (cosine ≥ 0.3). Missed strokes are preferred to coaching a non-stroke.
 - Racquet detection runs only ±0.3 s around a swing that has a ball near it, on every 2nd frame at 120 fps (heads interpolated); ball colour tests are memoised across overlapping swings.
 - Fallbacks:
@@ -76,14 +76,10 @@ Coordinates are full-frame pixels at the processed resolution. Heights come from
 - Manual override: two clicks in the UI (`baseline=x1,y1,x2,y2`).
 - `camera_side`: `far` means filmed from across the net (the court is lower in the image); `near` means filmed from behind the player.
 
-**Kalman filter** (`ball_tracking/kalman_filter.py`)
-- 6-state constant-acceleration filter with adaptive measurement noise.
-- Bug fixed: `predict(dt)` now really rebuilds `F`. It is kept for live, frame-by-frame tracking on the edge device.
-
 ## 5. Stage 4 — Judge (coaching logic)
 - Each rule is `(key, category, title, measurement, test, target, tip)`. List order is priority. A tip can depend on other measurements; for example, the "too high" advice depends on court position.
 - Failed checks become `suggestions` with `priority` and `category`. A check is `unknown` when its measurement is missing.
-- There is no machine learning in the judgement. The Random Forest experiment was removed, because it only echoed the rules.
+- There is no machine learning in the judgement: every check is an explainable rule.
 
 **Forehand** (`serve_analysis/forehand.py`, `FH_RULES`, 18 core checks + 8 joint checks, see Levels)
 
@@ -197,7 +193,7 @@ UI and CLI parameters:
 
 ## 9. Testing
 ```bash
-python -m pytest -q        # 38 tests (levels ladder, strict score, joint analysis, coach wording, backhand filter): Kalman, pose mapping, toss RANSAC + contact midpoint, rules, rulebook coverage
+python -m pytest -q        # pose mapping, toss RANSAC + contact midpoint, rules and levels, joint analysis, coach wording, backhand filter
 ```
 
 ## 10. Troubleshooting

@@ -73,7 +73,7 @@ def _run(job: dict, height: float, camera: str, baseline, mode: str, level: str 
 
 
 class Handler(BaseHTTPRequestHandler):
-    server_version = "ServeLab/0.1"
+    server_version = "CentreCourt/0.1"
 
     def log_message(self, fmt, *args):
         if "/api/jobs/" not in (args[0] if args else ""):
@@ -191,7 +191,7 @@ def main():
     port = int(os.environ.get("PORT", "8080"))
     os.makedirs(RUNS, exist_ok=True)
     os.chdir(ROOT)
-    print(f"Serve Lab demo on http://{host}:{port}")
+    print(f"Centre Court demo on http://{host}:{port}")
     ThreadingHTTPServer((host, port), Handler).serve_forever()
 
 
